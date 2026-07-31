@@ -1,7 +1,11 @@
 package com.sooumik.expenseFlow.entity;
 
+import com.sooumik.expenseFlow.common.enums.AccountType;
+import com.sooumik.expenseFlow.common.enums.Currency;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,19 +22,21 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "categories")
-public class Category extends BaseEntity {
+@Table(name = "payment_accounts")
+public class PaymentAccount extends BaseEntity {
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_category_id")
-    private Category parentCategory;
-
-    @Column(nullable = false, length = 100)
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Column(length = 255)
-    private String icon;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "account_type", nullable = false, length = 30)
+    private AccountType accountType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "currency", nullable = false, length = 10)
+    private Currency currency;
 }
