@@ -17,22 +17,33 @@ import lombok.Setter;
 @Entity
 @Table(name = "payment_accounts",
         indexes = {
-                @Index(name = "idx_payment_accounts_user", columnList = "user_id")
+                @Index(
+                        name = "idx_payment_account_user",
+                        columnList = "user_id"
+                )
         })
 public class PaymentAccount extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_payment_account_user"))
     private User user;
 
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(name = "name",
+            nullable = false,
+            length = 100)
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "account_type", nullable = false, length = 30)
+    @Column(name = "account_type",
+            nullable = false,
+            length = 30)
     private AccountType accountType;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "currency", nullable = false, length = 10)
+    @Column(name = "currency",
+            nullable = false,
+            length = 10)
     private Currency currency;
 }

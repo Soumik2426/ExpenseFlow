@@ -11,11 +11,13 @@ import lombok.*;
 @Entity
 @Table(name = "receipts",
         indexes = {
-                @Index(name = "idx_receipts_expense", columnList = "expense_id")
+                @Index(name = "idx_receipt_expense", columnList = "expense_id")
         })
 public class Receipt extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "expense_id", nullable = false)
+    @JoinColumn(name = "expense_id",
+            nullable = false,
+            foreignKey = @ForeignKey(name = "fk_receipt_expense"))
     private Expense expense;
 
     @Column(name = "storage_path", nullable = false, length = 500)
