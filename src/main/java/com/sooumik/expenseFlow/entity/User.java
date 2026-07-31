@@ -13,7 +13,10 @@ import lombok.*;
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity {
-    @Column(nullable = false, unique = true, length = 150)
+    @Column(name = "email",
+            nullable = false,
+            unique = true,
+            length = 150)
     private String email;
 
     @Column(name = "password_hash", nullable = false)

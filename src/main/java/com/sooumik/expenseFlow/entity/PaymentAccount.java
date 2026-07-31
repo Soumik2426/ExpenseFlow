@@ -2,14 +2,7 @@ package com.sooumik.expenseFlow.entity;
 
 import com.sooumik.expenseFlow.common.enums.AccountType;
 import com.sooumik.expenseFlow.common.enums.Currency;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +15,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "payment_accounts")
+@Table(name = "payment_accounts",
+        indexes = {
+                @Index(name = "idx_payment_accounts_user", columnList = "user_id")
+        })
 public class PaymentAccount extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

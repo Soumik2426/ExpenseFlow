@@ -1,14 +1,7 @@
 package com.sooumik.expenseFlow.entity;
 
 import com.sooumik.expenseFlow.common.enums.BudgetPeriod;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +17,18 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "budgets")
+@Table( name = "budgets",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uk_budget_user_category_period",
+                        columnNames = {
+                                "user_id",
+                                "category_id",
+                                "budget_period"
+                        }
+                )
+        }
+        )
 public class Budget extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
