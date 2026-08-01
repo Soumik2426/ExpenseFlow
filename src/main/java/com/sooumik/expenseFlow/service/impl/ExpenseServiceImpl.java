@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -54,6 +55,28 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         Expense savedExpense = expenseRepository.save(expense);
         return expenseMapper.toResponse(savedExpense);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ExpenseResponse getExpenseById(UUID expenseId) {
+
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        ErrorMessages.EXPENSE_NOT_FOUND
+                ));
+
+        return expenseMapper.toResponse(expense);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ExpenseResponse> getAllExpenses() {
+
+        return expenseRepository.findAll()
+                .stream()
+                .map(expenseMapper::toResponse)
+                .toList();
     }
 
     private User getUser(UUID userId) {

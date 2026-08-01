@@ -8,6 +8,7 @@ public final class ApiConstants {
     //Just name of API endpoints
     public static final String API_BASE_PATH = "/api/v1";
     public static final String EXPENSES = "/expenses";
+    public static final String GET_EXPENSES = "/getexpenses";
     public static final String CATEGORIES = "/categories";
     public static final String BUDGETS = "/budgets";
     public static final String PAYMENT_ACCOUNTS = "/payment-accounts";
