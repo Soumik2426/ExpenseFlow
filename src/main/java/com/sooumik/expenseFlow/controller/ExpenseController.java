@@ -58,4 +58,11 @@ public class ExpenseController {
                 .status(HttpStatus.OK)
                 .body(response);
     }
+
+    @DeleteMapping(ApiConstants.ID)
+    public ResponseEntity<Void> deleteExpense(@PathVariable UUID id) {
+
+        expenseService.deleteExpense(id);
+        return ResponseEntity.noContent().build();
+    }
 }

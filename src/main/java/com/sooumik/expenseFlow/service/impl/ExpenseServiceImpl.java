@@ -81,10 +81,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public ExpenseResponse updateExpense(
-            UUID expenseId,
-            UpdateExpenseRequest request
-    ) {
+    public ExpenseResponse updateExpense(UUID expenseId, UpdateExpenseRequest request) {
 
         Expense expense = getExpense(expenseId);
 
@@ -109,6 +106,13 @@ public class ExpenseServiceImpl implements ExpenseService {
         Expense updatedExpense = expenseRepository.save(expense);
 
         return expenseMapper.toResponse(updatedExpense);
+    }
+
+    @Override
+    public void deleteExpense(UUID expenseId) {
+
+        Expense expense = getExpense(expenseId);
+        expenseRepository.delete(expense);
     }
 
     private User getUser(UUID userId) {
