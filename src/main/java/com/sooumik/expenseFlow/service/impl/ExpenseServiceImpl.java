@@ -1,11 +1,14 @@
 package com.sooumik.expenseFlow.service.impl;
 
+import com.sooumik.expenseFlow.common.constants.ErrorMessages;
 import com.sooumik.expenseFlow.dto.request.CreateExpenseRequest;
 import com.sooumik.expenseFlow.dto.response.ExpenseResponse;
 import com.sooumik.expenseFlow.entity.Category;
 import com.sooumik.expenseFlow.entity.Expense;
 import com.sooumik.expenseFlow.entity.PaymentAccount;
 import com.sooumik.expenseFlow.entity.User;
+import com.sooumik.expenseFlow.exception.ResourceNotFoundException;
+import com.sooumik.expenseFlow.exception.UnauthorizedOperationException;
 import com.sooumik.expenseFlow.mapper.ExpenseMapper;
 import com.sooumik.expenseFlow.repository.CategoryRepository;
 import com.sooumik.expenseFlow.repository.ExpenseRepository;
@@ -56,17 +59,17 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     private User getUser(UUID userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.USER_NOT_FOUND));
     }
 
     private Category getCategory(UUID categoryId) {
         return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new EntityNotFoundException("Category not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.CATEGORY_NOT_FOUND));
     }
 
     private PaymentAccount getPaymentAccount(UUID paymentAccountId) {
         return paymentAccountRepository.findById(paymentAccountId)
-                .orElseThrow(() -> new EntityNotFoundException("Payment account not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.PAYMENT_ACCOUNT_NOT_FOUND));
     }
 
     private void validateOwnership(
@@ -76,15 +79,11 @@ public class ExpenseServiceImpl implements ExpenseService {
     ) {
 
         if (!category.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException(
-                    "Category does not belong to the user."
-            );
+            throw new UnauthorizedOperationException(ErrorMessages.CATEGORY_ACCESS_DENIED);
         }
 
         if (!paymentAccount.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException(
-                    "Payment account does not belong to the user."
-            );
+            throw new UnauthorizedOperationException(ErrorMessages.PAYMENT_ACCOUNT_ACCESS_DENIED);
         }
     }
 }
