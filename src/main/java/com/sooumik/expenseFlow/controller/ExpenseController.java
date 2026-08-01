@@ -21,6 +21,7 @@ public class ExpenseController {
 
     private final ExpenseService expenseService;
 
+    //To create an Expense
     @PostMapping
     public ResponseEntity<ExpenseResponse> createExpense(@Valid @RequestBody CreateExpenseRequest request) {
         ExpenseResponse response = expenseService.createExpense(request);
@@ -30,6 +31,7 @@ public class ExpenseController {
                 .body(response);
     }
 
+    //To get an expense by ID
     @GetMapping(ApiConstants.ID)
     public ResponseEntity<ExpenseResponse> getExpenseById(@PathVariable UUID id) {
         ExpenseResponse response = expenseService.getExpenseById(id);
@@ -39,6 +41,8 @@ public class ExpenseController {
                 .body(response);
     }
 
+
+    //To get all the expenses
     @GetMapping
     public ResponseEntity<List<ExpenseResponse>> getAllExpenses() {
 
@@ -49,6 +53,7 @@ public class ExpenseController {
                 .body(response);
     }
 
+    //To update an already existing expense
     @PutMapping(ApiConstants.ID)
     public ResponseEntity<ExpenseResponse> updateExpense(@PathVariable UUID id, @Valid @RequestBody UpdateExpenseRequest request) {
 
@@ -59,6 +64,7 @@ public class ExpenseController {
                 .body(response);
     }
 
+    //To delete an already existing expense
     @DeleteMapping(ApiConstants.ID)
     public ResponseEntity<Void> deleteExpense(@PathVariable UUID id) {
 
