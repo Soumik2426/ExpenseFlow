@@ -1,6 +1,7 @@
 package com.sooumik.expenseFlow.controller;
 
 import com.sooumik.expenseFlow.dto.request.CreateExpenseRequest;
+import com.sooumik.expenseFlow.dto.request.UpdateExpenseRequest;
 import com.sooumik.expenseFlow.dto.response.ExpenseResponse;
 import com.sooumik.expenseFlow.service.ExpenseService;
 import com.sooumik.expenseFlow.common.constants.ApiConstants;
@@ -14,13 +15,13 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(ApiConstants.API_BASE_PATH)
+@RequestMapping(ApiConstants.API_BASE_PATH + ApiConstants.EXPENSES)
 @RequiredArgsConstructor
 public class ExpenseController {
 
     private final ExpenseService expenseService;
 
-    @PostMapping(ApiConstants.EXPENSES)
+    @PostMapping
     public ResponseEntity<ExpenseResponse> createExpense(@Valid @RequestBody CreateExpenseRequest request) {
         ExpenseResponse response = expenseService.createExpense(request);
 
@@ -38,10 +39,20 @@ public class ExpenseController {
                 .body(response);
     }
 
-    @GetMapping(ApiConstants.GET_EXPENSES)
+    @GetMapping
     public ResponseEntity<List<ExpenseResponse>> getAllExpenses() {
 
         List<ExpenseResponse> response = expenseService.getAllExpenses();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
+    @PutMapping(ApiConstants.ID)
+    public ResponseEntity<ExpenseResponse> updateExpense(@PathVariable UUID id, @Valid @RequestBody UpdateExpenseRequest request) {
+
+        ExpenseResponse response = expenseService.updateExpense(id, request);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

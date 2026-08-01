@@ -1,6 +1,7 @@
 package com.sooumik.expenseFlow.mapper;
 
 import com.sooumik.expenseFlow.dto.request.CreateExpenseRequest;
+import com.sooumik.expenseFlow.dto.request.UpdateExpenseRequest;
 import com.sooumik.expenseFlow.dto.response.ExpenseResponse;
 import com.sooumik.expenseFlow.entity.Category;
 import com.sooumik.expenseFlow.entity.Expense;
@@ -11,13 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExpenseMapper {
 
-    public Expense toEntity(
-            CreateExpenseRequest request,
-            User user,
-            Category category,
-            PaymentAccount paymentAccount
-    ) {
-
+    public Expense toEntity(CreateExpenseRequest request, User user, Category category, PaymentAccount paymentAccount) {
         return Expense.builder()
                 .title(request.getTitle())
                 .description(request.getDescription())
@@ -52,5 +47,14 @@ public class ExpenseMapper {
                 .createdAt(expense.getCreatedAt())
                 .updatedAt(expense.getUpdatedAt())
                 .build();
+    }
+
+    public void updateEntity(Expense expense, UpdateExpenseRequest request, Category category, PaymentAccount paymentAccount) {
+        expense.setTitle(request.getTitle());
+        expense.setDescription(request.getDescription());
+        expense.setAmount(request.getAmount());
+        expense.setExpenseDate(request.getExpenseDate());
+        expense.setCategory(category);
+        expense.setPaymentAccount(paymentAccount);
     }
 }

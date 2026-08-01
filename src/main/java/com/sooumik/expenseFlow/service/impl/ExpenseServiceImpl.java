@@ -4,6 +4,7 @@ import com.sooumik.expenseFlow.common.constants.ErrorMessages;
 import com.sooumik.expenseFlow.dto.request.CreateExpenseRequest;
 import com.sooumik.expenseFlow.dto.response.ExpenseResponse;
 import com.sooumik.expenseFlow.entity.Category;
+import com.sooumik.expenseFlow.dto.request.UpdateExpenseRequest;
 import com.sooumik.expenseFlow.entity.Expense;
 import com.sooumik.expenseFlow.entity.PaymentAccount;
 import com.sooumik.expenseFlow.entity.User;
@@ -79,6 +80,37 @@ public class ExpenseServiceImpl implements ExpenseService {
                 .toList();
     }
 
+    @Override
+    public ExpenseResponse updateExpense(
+            UUID expenseId,
+            UpdateExpenseRequest request
+    ) {
+
+        Expense expense = getExpense(expenseId);
+
+        Category category = getCategory(request.getCategoryId());
+
+        PaymentAccount paymentAccount =
+                getPaymentAccount(request.getPaymentAccountId());
+
+        validateOwnership(
+                expense.getUser(),
+                category,
+                paymentAccount
+        );
+
+        expenseMapper.updateEntity(
+                expense,
+                request,
+                category,
+                paymentAccount
+        );
+
+        Expense updatedExpense = expenseRepository.save(expense);
+
+        return expenseMapper.toResponse(updatedExpense);
+    }
+
     private User getUser(UUID userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.USER_NOT_FOUND));
@@ -107,5 +139,13 @@ public class ExpenseServiceImpl implements ExpenseService {
         if (!paymentAccount.getUser().getId().equals(user.getId())) {
             throw new UnauthorizedOperationException(ErrorMessages.PAYMENT_ACCOUNT_ACCESS_DENIED);
         }
+    }
+
+    private Expense getExpense(UUID expenseId) {
+        return expenseRepository.findById(expenseId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                ErrorMessages.EXPENSE_NOT_FOUND
+                        ));
     }
 }

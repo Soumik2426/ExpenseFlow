@@ -1,6 +1,7 @@
 package com.sooumik.expenseFlow.service;
 
 import com.sooumik.expenseFlow.dto.request.CreateExpenseRequest;
+import com.sooumik.expenseFlow.dto.request.UpdateExpenseRequest;
 import com.sooumik.expenseFlow.dto.response.ExpenseResponse;
 
 import java.util.List;
@@ -11,4 +12,5 @@ public interface ExpenseService {
     ExpenseResponse createExpense(CreateExpenseRequest request);
     ExpenseResponse getExpenseById(UUID expenseId);
     List<ExpenseResponse> getAllExpenses();
+    ExpenseResponse updateExpense(UUID expenseId, UpdateExpenseRequest request);
 }
