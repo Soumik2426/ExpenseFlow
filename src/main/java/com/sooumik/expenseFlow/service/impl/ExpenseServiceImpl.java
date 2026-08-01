@@ -32,13 +32,16 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public ExpenseResponse createExpense(CreateExpenseRequest request) {
-
         User user = getUser(request.getUserId());
-
         Category category = getCategory(request.getCategoryId());
 
-        PaymentAccount paymentAccount =
-                getPaymentAccount(request.getPaymentAccountId());
+        PaymentAccount paymentAccount = getPaymentAccount(request.getPaymentAccountId());
+
+        validateOwnership(
+                user,
+                category,
+                paymentAccount
+        );
 
         Expense expense = expenseMapper.toEntity(
                 request,
@@ -48,25 +51,40 @@ public class ExpenseServiceImpl implements ExpenseService {
         );
 
         Expense savedExpense = expenseRepository.save(expense);
-
         return expenseMapper.toResponse(savedExpense);
     }
 
     private User getUser(UUID userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() ->
-                        new EntityNotFoundException("User not found."));
+                .orElseThrow(() -> new EntityNotFoundException("User not found."));
     }
 
     private Category getCategory(UUID categoryId) {
         return categoryRepository.findById(categoryId)
-                .orElseThrow(() ->
-                        new EntityNotFoundException("Category not found."));
+                .orElseThrow(() -> new EntityNotFoundException("Category not found."));
     }
 
     private PaymentAccount getPaymentAccount(UUID paymentAccountId) {
         return paymentAccountRepository.findById(paymentAccountId)
-                .orElseThrow(() ->
-                        new EntityNotFoundException("Payment account not found."));
+                .orElseThrow(() -> new EntityNotFoundException("Payment account not found."));
+    }
+
+    private void validateOwnership(
+            User user,
+            Category category,
+            PaymentAccount paymentAccount
+    ) {
+
+        if (!category.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException(
+                    "Category does not belong to the user."
+            );
+        }
+
+        if (!paymentAccount.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException(
+                    "Payment account does not belong to the user."
+            );
+        }
     }
 }
