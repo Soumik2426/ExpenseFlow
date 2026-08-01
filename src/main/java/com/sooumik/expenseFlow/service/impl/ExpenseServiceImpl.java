@@ -15,7 +15,6 @@ import com.sooumik.expenseFlow.repository.ExpenseRepository;
 import com.sooumik.expenseFlow.repository.PaymentAccountRepository;
 import com.sooumik.expenseFlow.repository.UserRepository;
 import com.sooumik.expenseFlow.service.ExpenseService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
